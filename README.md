@@ -1,105 +1,176 @@
 # AI Logistics Agent
 
-Agente en Python para monitorear guias de paqueteria, detectar retrasos y generar un reporte operativo interno.
+Agente inteligente en Python para monitoreo automatizado de guías de paquetería, detección de incidencias y generación de reportes operativos estructurados.
 
-Este proyecto combina:
-- IA para interpretar estatus tecnicos de distintas paqueterias.
-- Reglas de negocio simples para detectar riesgo/retraso.
-- Salida estructurada en JSON para seguimiento diario.
-- Alerta interna opcional por email (SMTP).
+Este proyecto combina automatización, reglas de negocio y modelos de IA para transformar estatus técnicos de paqueterías en información accionable para equipos internos.
 
-## Que resuelve
+---
 
-En lugar de solo avisar al cliente, este agente ayuda al equipo interno a actuar antes:
-- identifica guias retrasadas,
-- clasifica nivel de alerta,
-- sugiere accion interna,
-- y genera un resumen diario.
+## 🚀 ¿Qué problema resuelve?
 
-## Stack
+En entornos logísticos, los estatus de paquetería suelen ser técnicos, inconsistentes y difíciles de interpretar rápidamente.
 
-- Python 3
-- OpenAI API (`openai`)
-- Variables de entorno (`python-dotenv`)
-- JSON como entrada/salida
-- SMTP opcional para alertas internas
+Este agente:
 
-## Estructura del proyecto
+* Normaliza estatus de múltiples paqueterías.
+* Detecta posibles retrasos mediante reglas de negocio.
+* Clasifica niveles de alerta (Verde / Amarillo / Rojo).
+* Sugiere acciones internas.
+* Genera un reporte diario estructurado en JSON.
+* Permite envío opcional de alertas internas por correo (SMTP).
 
-- `agent.py`: logica principal del agente.
-- `guias.json`: datos de ejemplo de guias.
-- `reporte_diario.json`: salida generada por ejecucion.
-- `.env.example`: plantilla de configuracion.
-- `.gitignore`: proteccion de secretos y archivos locales.
+El enfoque no es solo informar al cliente, sino habilitar acción operativa preventiva.
 
-## Configuracion
+---
 
-1) Crea tu entorno virtual:
+## 🧠 Enfoque Técnico
+
+El flujo combina:
+
+1. Interpretación inteligente de estatus técnicos mediante OpenAI API.
+2. Reglas de negocio determinísticas para detección de riesgo.
+3. Generación de salida estructurada lista para integrarse en dashboards o sistemas backend.
+4. Automatización del reporte diario.
+
+---
+
+## 🛠 Stack Tecnológico
+
+* Python 3
+* OpenAI API (`openai`)
+* `python-dotenv` para manejo seguro de variables de entorno
+* JSON como formato de entrada y salida
+* SMTP opcional para alertas internas
+
+---
+
+## 📂 Estructura del Proyecto
+
+* `agent.py` → Lógica principal del agente.
+* `guias.json` → Datos de ejemplo para simulación.
+* `reporte_diario.json` → Reporte generado automáticamente.
+* `.env.example` → Plantilla de configuración.
+* `.gitignore` → Protección de credenciales y archivos locales.
+
+---
+
+## ⚙️ Configuración
+
+### 1️⃣ Crear entorno virtual
 
 ```powershell
 python -m venv venv
 ```
 
-2) Activa el entorno:
+### 2️⃣ Activar entorno
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-3) Instala dependencias:
+### 3️⃣ Instalar dependencias
 
 ```powershell
 pip install openai python-dotenv
 ```
 
-4) Crea tu `.env` a partir de `.env.example` y completa al menos:
+### 4️⃣ Configurar variables de entorno
+
+Crear archivo `.env` basado en `.env.example` y definir como mínimo:
 
 ```env
 OPENAI_API_KEY=tu_api_key
 ```
 
-Opcional (alertas internas por email):
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_USER`
-- `SMTP_PASSWORD`
-- `ALERT_FROM`
-- `ALERT_TO`
+### Variables opcionales para alertas internas:
 
-## Ejecucion
+* SMTP_HOST
+* SMTP_PORT
+* SMTP_USER
+* SMTP_PASSWORD
+* ALERT_FROM
+* ALERT_TO
 
-```powershell
-python agent.py
-```
+Si SMTP no está configurado, el sistema continúa sin enviar correo.
 
-Si no tienes configurado SMTP, el flujo continua y solo omite el envio de correo.
+---
 
-## Logica de retraso (MVP)
+## 🧩 Lógica de Detección de Retraso (MVP)
 
-Una guia se marca como retrasada si:
-- el estatus contiene `EXCEPTION`, `FAILED` o `NOT FOUND`, o
-- `horas_sin_movimiento >= 48`.
+Una guía se marca como retrasada cuando:
 
-## Salida esperada
+* El estatus contiene palabras clave como:
 
-Se genera `reporte_diario.json` con:
-- `resumen`: total de guias, retrasadas y alertas rojas.
-- `guias`: detalle por guia con:
-  - `retrasado`
-  - `motivo_retraso`
-  - `nivel_alerta`
-  - `accion_interna`
-  - `explicacion_cliente`
-  - `explicacion_interna`
+  * `EXCEPTION`
+  * `FAILED`
+  * `NOT FOUND`
+* O cuando:
 
-## Demo recomendada para portafolio
+  * `horas_sin_movimiento >= 48`
 
-1) Mostrar ejecucion en terminal (PowerShell).
-2) Mostrar el `reporte_diario.json` con una guia retrasada.
-3) Explicar en 1 frase: IA + reglas de negocio para accion operativa.
+Esto permite una combinación de:
 
-## Nota de seguridad
+* Heurística determinística
+* Interpretación contextual asistida por IA
 
-- No subir `.env` al repositorio.
-- Si una API key se expone, rotarla (revocar y generar una nueva).
+---
+
+## 📊 Salida Generada
+
+Se crea automáticamente `reporte_diario.json` con:
+
+### `resumen`
+
+* total_guias
+* retrasadas
+* alertas_rojas
+* fecha_reporte
+
+### `guias`
+
+Por cada guía:
+
+* `retrasado`
+* `motivo_retraso`
+* `nivel_alerta`
+* `accion_interna`
+* `explicacion_cliente`
+* `explicacion_interna`
+
+Este formato está diseñado para:
+
+* Integrarse con APIs backend
+* Alimentar dashboards
+* Generar notificaciones automáticas
+
+---
+
+## 🧪 Demo Recomendada para Portafolio
+
+1. Ejecutar `python agent.py` en PowerShell.
+2. Mostrar salida en terminal.
+3. Abrir `reporte_diario.json`.
+4. Explicar en una frase:
+
+> Agente automatizado que combina IA + reglas de negocio para generar acción operativa en logística.
+
+---
+
+## 🔐 Seguridad
+
+* Nunca subir el archivo `.env` al repositorio.
+* Si una API key se expone, debe revocarse y regenerarse.
+* Las credenciales SMTP deben manejarse únicamente mediante variables de entorno.
+
+---
+
+##👩‍💻 Sobre el Proyecto
+Desarrolladora con enfoque en automatización, arquitectura de APIs y soluciones empresariales.
+
+🔗 LinkedIn:
+https://www.linkedin.com/in/miriam-garc%C3%ADa100625/
+
+📩 Contacto:
+miriam100625@gmail.com
+
 
