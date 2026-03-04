@@ -163,13 +163,11 @@ Este formato está diseñado para:
 * Las credenciales SMTP deben manejarse únicamente mediante variables de entorno.
 
 ---
-
-##👩‍💻 Sobre el Proyecto
-Desarrolladora con enfoque en automatización, arquitectura de APIs y soluciones empresariales.
+## 👩‍💻 Sobre el Proyecto
+Desarrollado por **Miriam G.** como proyecto enfocado en automatización logistica. 
 
 🔗 LinkedIn:
 https://www.linkedin.com/in/miriam-garc%C3%ADa100625/
-
 📩 Contacto:
 miriam100625@gmail.com
 
