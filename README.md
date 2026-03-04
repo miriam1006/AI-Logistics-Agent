@@ -1,174 +1,109 @@
-# AI Logistics Agent
+# 🤖 AI Logistics Agent
 
-Agente inteligente en Python para monitoreo automatizado de guías de paquetería, detección de incidencias y generación de reportes operativos estructurados.
+Agente inteligente en **Python** diseñado para el monitoreo automatizado de guías de paquetería, detección proactiva de incidencias y generación de reportes operativos estructurados.
 
-Este proyecto combina automatización, reglas de negocio y modelos de IA para transformar estatus técnicos de paqueterías en información accionable para equipos internos.
+Este proyecto combina automatización tradicional, reglas de negocio y modelos de lenguaje de última generación (**GPT-4o**) para transformar estatus técnicos crudos en información accionable para equipos de soporte y clientes finales.
 
 ---
 
 ## 🚀 ¿Qué problema resuelve?
 
-En entornos logísticos, los estatus de paquetería suelen ser técnicos, inconsistentes y difíciles de interpretar rápidamente.
+En entornos logísticos y de e-commerce, los estatus proporcionados por las transportistas suelen ser técnicos, inconsistentes y difíciles de interpretar a gran escala.
 
-Este agente:
+**Este agente permite:**
 
-* Normaliza estatus de múltiples paqueterías.
-* Detecta posibles retrasos mediante reglas de negocio.
-* Clasifica niveles de alerta (Verde / Amarillo / Rojo).
-* Sugiere acciones internas.
-* Genera un reporte diario estructurado en JSON.
-* Permite envío opcional de alertas internas por correo (SMTP).
-
-El enfoque no es solo informar al cliente, sino habilitar acción operativa preventiva.
+* **Normalizar estatus** de múltiples paqueterías (FedEx, DHL, Estafeta, etc.).
+* **Detectar retrasos** mediante una combinación de reglas fijas e interpretación contextual.
+* **Clasificar niveles de alerta** (Verde / Amarillo / Rojo) según la gravedad operativa.
+* **Sugerir acciones inmediatas** (Contactar cliente, llamar a paquetería, etc.).
+* **Generar reportes estructurados** en formato JSON listos para integrarse con dashboards o bases de datos como **Supabase**.
 
 ---
 
 ## 🧠 Enfoque Técnico
 
-El flujo combina:
+El flujo de trabajo del agente integra dos metodologías para maximizar la precisión:
 
-1. Interpretación inteligente de estatus técnicos mediante OpenAI API.
-2. Reglas de negocio determinísticas para detección de riesgo.
-3. Generación de salida estructurada lista para integrarse en dashboards o sistemas backend.
-4. Automatización del reporte diario.
+1. **Interpretación Contextual (IA):** Utiliza la API de OpenAI para entender el "sentimiento" y significado de errores complejos en el rastreo.
+2. **Heurística Determinística (Reglas de Negocio):** Aplica validaciones lógicas para detectar anomalías de tiempo (ej. más de 48 horas sin movimiento).
+3. **Salida Estructurada:** Garantiza que la respuesta sea siempre un objeto JSON válido, facilitando la automatización de procesos posteriores.
 
 ---
 
 ## 🛠 Stack Tecnológico
 
-* Python 3
-* OpenAI API (`openai`)
-* `python-dotenv` para manejo seguro de variables de entorno
-* JSON como formato de entrada y salida
-* SMTP opcional para alertas internas
+* **Lenguaje:** Python 3.10+.
+* **IA:** OpenAI API (`openai` SDK).
+* **Gestión de Entorno:** `python-dotenv` para el manejo seguro de credenciales.
+* **Persistencia:** JSON (entrada/salida) y compatibilidad con SQL (Supabase/PostgreSQL).
+* **Infraestructura:** Preparado para despliegue en entornos como Render.
 
 ---
 
 ## 📂 Estructura del Proyecto
 
-* `agent.py` → Lógica principal del agente.
-* `guias.json` → Datos de ejemplo para simulación.
-* `reporte_diario.json` → Reporte generado automáticamente.
-* `.env.example` → Plantilla de configuración.
-* `.gitignore` → Protección de credenciales y archivos locales.
+* `agent.py` → Lógica principal del agente y conexión con la IA.
+* `guias.json` → Dataset de ejemplo con casos de prueba reales.
+* `reporte_diario.json` → Output generado con el análisis consolidado.
+* `.env.example` → Plantilla de configuración de variables de entorno.
+* `.gitignore` → Protección de llaves de API y archivos temporales.
 
 ---
 
-## ⚙️ Configuración
+## ⚙️ Configuración e Instalación
 
-### 1️⃣ Crear entorno virtual
+### 1️⃣ Preparar el Entorno (Windows/PowerShell)
 
 ```powershell
 python -m venv venv
-```
-
-### 2️⃣ Activar entorno
-
-```powershell
 .\venv\Scripts\Activate.ps1
+
 ```
 
-### 3️⃣ Instalar dependencias
+### 2️⃣ Instalar Dependencias
 
 ```powershell
 pip install openai python-dotenv
+
 ```
 
-### 4️⃣ Configurar variables de entorno
+### 3️⃣ Configurar Variables de Env
 
-Crear archivo `.env` basado en `.env.example` y definir como mínimo:
+Crear un archivo `.env` basado en `.env.example`:
 
 ```env
-OPENAI_API_KEY=tu_api_key
+OPENAI_API_KEY=tu_api_key_aqui
+
 ```
 
-### Variables opcionales para alertas internas:
+---
 
-* SMTP_HOST
-* SMTP_PORT
-* SMTP_USER
-* SMTP_PASSWORD
-* ALERT_FROM
-* ALERT_TO
+## 📊 Salida de Ejemplo (JSON)
 
-Si SMTP no está configurado, el sistema continúa sin enviar correo.
+El sistema genera automáticamente un `reporte_diario.json` con la siguiente estructura, ideal para alimentar un backend o sistema de notificaciones:
+
+```json
+{
+  "guia": "CF-102",
+  "retrasado": true,
+  "nivel_alerta": "Amarillo",
+  "explicacion_cliente": "No hemos podido localizar tu domicilio, por favor verifica tus datos.",
+  "accion_interna": "Contactar cliente para confirmar dirección"
+}
+
+```
 
 ---
 
-## 🧩 Lógica de Detección de Retraso (MVP)
+## 🔐 Seguridad y Buenas Prácticas
 
-Una guía se marca como retrasada cuando:
-
-* El estatus contiene palabras clave como:
-
-  * `EXCEPTION`
-  * `FAILED`
-  * `NOT FOUND`
-* O cuando:
-
-  * `horas_sin_movimiento >= 48`
-
-Esto permite una combinación de:
-
-* Heurística determinística
-* Interpretación contextual asistida por IA
+* **Aislamiento de Credenciales:** Uso estricto de `.env` para evitar la exposición de saldos o llaves de API.
+* **Manejo de Errores:** Estructura preparada para gestionar fallos de conexión o cuotas excedidas en la API sin interrumpir el flujo logístico.
 
 ---
 
-## 📊 Salida Generada
-
-Se crea automáticamente `reporte_diario.json` con:
-
-### `resumen`
-
-* total_guias
-* retrasadas
-* alertas_rojas
-* fecha_reporte
-
-### `guias`
-
-Por cada guía:
-
-* `retrasado`
-* `motivo_retraso`
-* `nivel_alerta`
-* `accion_interna`
-* `explicacion_cliente`
-* `explicacion_interna`
-
-Este formato está diseñado para:
-
-* Integrarse con APIs backend
-* Alimentar dashboards
-* Generar notificaciones automáticas
-
----
-
-## 🧪 Demo Recomendada para Portafolio
-
-1. Ejecutar `python agent.py` en PowerShell.
-2. Mostrar salida en terminal.
-3. Abrir `reporte_diario.json`.
-4. Explicar en una frase:
-
-> Agente automatizado que combina IA + reglas de negocio para generar acción operativa en logística.
-
----
-
-## 🔐 Seguridad
-
-* Nunca subir el archivo `.env` al repositorio.
-* Si una API key se expone, debe revocarse y regenerarse.
-* Las credenciales SMTP deben manejarse únicamente mediante variables de entorno.
-
----
 ## 👩‍💻 Sobre el Proyecto
-Desarrollado por **Miriam G.** como proyecto enfocado en automatización logistica. 
 
-🔗 LinkedIn:
-https://www.linkedin.com/in/miriam-garc%C3%ADa100625/
-📩 Contacto:
-miriam100625@gmail.com
+Desarrollado por **Miriam G.**, enfocado en la optimización operativa de flujos de e-commerce y logística inteligente. Inspirado en la automatización de procesos reales.
 
 
