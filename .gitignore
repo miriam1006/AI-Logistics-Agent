@@ -1,0 +1,12 @@
+# Secrets and local env
+.env
+.env.*
+!.env.example
+
+# Python env and cache
+venv/
+__pycache__/
+*.pyc
+
+# Generated reports
+reporte_diario.json

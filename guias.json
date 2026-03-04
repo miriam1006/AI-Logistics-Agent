@@ -1,0 +1,20 @@
+[
+    {
+        "id_guia": "CF-101",
+        "paqueteria": "FedEx",
+    "estatus_raw": "DELIVERED - SIGNED BY: RECEPCION",
+    "horas_sin_movimiento": 0
+    },
+    {
+        "id_guia": "CF-102",
+        "paqueteria": "DHL",
+    "estatus_raw": "EXCEPTION: ADDRESS NOT FOUND",
+    "horas_sin_movimiento": 50
+    },
+    {
+        "id_guia": "CF-103",
+        "paqueteria": "Estafeta",
+    "estatus_raw": "IN TRANSIT - ON VEHICLE FOR DELIVERY",
+    "horas_sin_movimiento": 12
+    }
+]
